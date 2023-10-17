@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://bootswatch.com/4/united/bootstrap.min.css">   
+    <title>Flask Feedback</title>
+</head>
+<body>
+
+    <nav class="navbar navbar-light bg-primary justify-content-between">
+        <div class="container">
+
+            <a href="/" class="navbar-brand text-light">Flask Feedback</a>                
+
+
+            <ul class="nav navbar-nav flex-row float-right">
+
+                {% if 'username' not in session %}
+                <li class="nav-item"> 
+                    <a href="/login" class="nav-link pr-3 text-light">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/register" class="nav-link pr-3 text-light">Sign up</a>
+                </li>
+                {% endif %}
+
+                {% if 'username' in session %}
+                <li class="nav-item">
+                    <a href="/users/{{session.username}}/feedback/add" class="nav-link pr-3 text-light">Add Feedback</a>
+                </li>                
+                <li class="nav-item">
+                    <a href="/users/{{session.username}}" class="nav-link pr-3 text-light">{{session.username}}</a>
+                </li>                
+                <li class="nav-item"> 
+                    <form action="/logout" method="post">
+                        <button class="btn-link">Logout</button>
+                    </form>
+                    <!-- <a href="/logout" class="nav-link pr-3 text-light">Logout</a> -->
+                </li>
+                {% endif %}
+
+            </ul>                
+
+
+        </div>
+    </nav>
+    
+
+    <div class="container"> 
+        {% for category, msg in get_flashed_messages(with_categories=True) %}
+        <div class="alert alert-{{category}}" style="margin-top: 2em">{{msg}}</div>
+        {% endfor %}
+
+        {% block content %}
+        <h1>Flask Feedback</h1>        
+        {% endblock %}
+    </div>
+
+    {% for feedback in feedbacks %}
+    <div class="container" id="{{feedback.id}}">
+        <h3>
+           {{feedback.title}}   
+           <small><small><small><small>
+            by {{feedback.user.username}}
+           </small> </small></small></small>          
+        </h3> 
+        <div>
+            {{feedback.content}}
+        </div> 
+        {% if feedback.user.username == session.username %}
+        <div class="">
+            <a href="/feedback/{{feedback.id}}/update">Edit</a>
+            <form action="/feedback/{{feedback.id}}/delete" method="post">
+                <button class= "btn btn-sm btn-danger">Delete</button>
+            </form>
+        </div>
+        {% endif %}     
+    </div>
+    {% endfor %}
+    
+</body>
+</html>

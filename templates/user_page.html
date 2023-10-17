@@ -1,0 +1,49 @@
+{% extends 'base.html'  %}
+
+<!-- {% block title %} Flask Feedback {% endblock %} -->
+
+{% block content %}
+
+<div class="container justify-content-between">
+    <div>
+        <h2 >{{user.username}}</h2>        
+    </div>
+
+    <div>
+        <form action="/users/{{username}}/delete"> 
+            <button class="float-right">
+                <small>
+                    Delete User
+                </small>
+            </button>    
+        </form>        
+    </div>
+
+</div>
+
+
+<div class="container">
+    
+    {% for feedback in user.feedbacks %}
+    <div class="container" id="{{feedback.id}}">
+        <h3>
+           {{feedback.title}}             
+        </h3> 
+        <div>
+            {{feedback.content}}
+        </div> 
+        {% if feedback.user.username == session.username %}
+        <div class="">
+            <a href="/feedback/{{feedback.id}}/update">Edit</a>
+            <form action="/feedback/{{feedback.id}}/delete" method="post">
+                <button class= "btn btn-sm btn-danger">Delete</button>
+            </form>
+        </div>
+        {% endif %}     
+    </div>
+    {% endfor %}
+
+</div>
+
+
+{% endblock %}
