@@ -15,7 +15,7 @@ app.app_context().push()
 # ACCESS FLASK WITHIN IPYTHON AND HAVE SESSIONS
 
 connect_db(app)
-db.create_all()
+# db.create_all()
 
 toolbar = DebugToolbarExtension(app)
 
